@@ -14,8 +14,12 @@ on:
         default: 'latest'
         required: true
         type: string
+      REGISTRY_URL:
+          description: 'this is used during the image push to a registry'
+          required: true
+          type: string
       REGISTRY_USERNAME:
-        description: 'this is used during the image push to quay'
+        description: 'this is used during the image push to a registry'
         required: true
         type: string
       REDHAT_USERNAME:
@@ -24,16 +28,13 @@ on:
         type: string
     secrets:
       REGISTRY_PASSWORD:
-        description: 'needed for quay.io login'
+        description: 'needed for destination registry login'
         required: false
       REDHAT_PASSWORD:
         description: 'needed for redhat.registry.io login'
         required: false
       AH_TOKEN:
         description: 'API token for Red Hat automation hub'
-        required: false
-      PAH_TOKEN:
-        description: 'API token for private automation hub'
         required: false
 
 jobs:

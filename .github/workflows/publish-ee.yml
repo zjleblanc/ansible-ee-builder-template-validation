@@ -46,6 +46,7 @@ jobs:
     with:
       EE_FOLDER_NAME: ${{ matrix.value }}
       EE_IMAGE_TAG: ${{ vars.EE_IMAGE_TAG }}
+      REGISTRY_URL: ${{ vars.REGISTRY_URL }}
       REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
       REDHAT_USERNAME: ${{ vars.REDHAT_USERNAME }}
     secrets:
