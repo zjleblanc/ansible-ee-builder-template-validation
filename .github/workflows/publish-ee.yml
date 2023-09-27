@@ -1,0 +1,54 @@
+name: publish-execution-environments
+run-name: ${{ github.actor }} publishing execution environments
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      ee-matrix: ${{ steps.ee-changes.outputs.changed-ees }}
+      ee-count: ${{ steps.ee-changes.outputs.changed-ees-count }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 2
+
+      - name: Identify changed files
+        uses: tj-actions/changed-files@v35
+        id: file-changes
+        with:
+          since_last_remote_commit: true
+          files: '**/*'
+          files_ignore: |
+            **/*.md
+            **/*.cfg
+            **/.files/*
+            .github/*
+            requirements.workflow.txt
+            LICENSE
+
+
+      - name: Determine EEs to build
+        id: ee-changes
+        uses: ./.github/actions/changed-ee-contexts
+        with: 
+          changed-files: ${{ steps.file-changes.outputs.all_changed_files }}
+
+  publish-ee-changes:
+    needs: [ setup ]
+    if: needs.setup.outputs.ee-count > 0
+    strategy:
+      matrix:
+        value: ${{ fromJSON(needs.setup.outputs.ee-matrix) }}
+    uses:  ./.github/workflows/deploy.yml
+    with:
+      EE_FOLDER_NAME: ${{ matrix.value }}
+      EE_IMAGE_TAG: ${{ vars.EE_IMAGE_TAG }}
+      REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}
+      REDHAT_USERNAME: ${{ vars.REDHAT_USERNAME }}
+    secrets:
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      REDHAT_PASSWORD: ${{ secrets.REDHAT_PASSWORD }}
+      AH_TOKEN: ${{ secrets.AH_TOKEN }}

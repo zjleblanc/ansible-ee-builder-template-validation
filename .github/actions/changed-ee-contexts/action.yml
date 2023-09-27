@@ -1,0 +1,14 @@
+name: 'changed-ee-contexts'
+description: 'Get changed execution environment contexts based on a list of changed files'
+inputs:
+  changed-files:
+    description: 'changed files'
+    required: true
+outputs:
+  changed-ees:
+    description: 'changed execution environments'
+  build-required:
+    description: 'flag to run build job if required'
+runs:
+  using: 'node16'
+  main: 'index.js'
