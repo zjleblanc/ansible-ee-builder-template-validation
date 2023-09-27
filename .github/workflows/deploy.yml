@@ -86,7 +86,7 @@ jobs:
           tags: |
             ${{ inputs.EE_IMAGE_TAG }}
             ${{ github.sha }}
-          registry: ${{ inputs.REGISTRY_URL }}/${{ inputs.REGISTRY_USERNAME }}/
+          registry: ${{ inputs.REGISTRY_URL }}/
           username: ${{ inputs.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }} 
         
